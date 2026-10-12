@@ -39,7 +39,8 @@
 - Executed 20 password-hashing and DataView filter assertions on the available .NET runtime: passed.
 - Parsed 118 C# files and checked all project/resource references: passed.
 - Parsed 148 standalone/embedded SQL statements with Microsoft's T-SQL parser: passed.
-- Windows Forms runtime, MSBuild resource generation, SQL Server execution, and PowerShell execution were not available in the review environment. The supplied CI and manual checklist cover those remaining checks; no result is claimed for them.
+- GitHub Actions Windows MSBuild, including resource generation: passed. SQL Server integration tests run in the supplied LocalDB CI job; consult the latest workflow result for their execution status. The LocalDB connection is explicitly configured for local IPC without TLS.
+- The Windows GUI walkthrough and demo-account PowerShell script still require manual verification.
 
 ## Remaining scope
 

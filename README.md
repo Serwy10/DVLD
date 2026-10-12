@@ -36,7 +36,7 @@ Targets **.NET Framework 4.7.2**. This is a desktop application; it does not exp
    sqlcmd -S . -E -b -i database/02-reference-data.sql
    ```
 
-4. Set the `DVLD` connection string in `DVLD/App.config`. The default uses the local SQL Server instance and Windows authentication. For Express, use `Server=.\SQLEXPRESS`; for LocalDB, use `Server=(localdb)\MSSQLLocalDB`.
+4. Set the `DVLD` connection string in `DVLD/App.config`. The default uses the local SQL Server instance and Windows authentication. For Express, use `Server=.\SQLEXPRESS`; for LocalDB, use `Server=(localdb)\MSSQLLocalDB` and `Encrypt=False`.
 5. Open `DVLD.sln`, select **Release**, and build. Alternatively, use a Visual Studio Developer PowerShell:
 
    ```powershell
@@ -85,11 +85,11 @@ After building:
 For SQL integration tests, point the test server setting at a server where your Windows account can create and drop **temporary test databases**:
 
 ```powershell
-$env:DVLD_TEST_SERVER_CONNECTION = 'Server=(localdb)\MSSQLLocalDB;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;'
+$env:DVLD_TEST_SERVER_CONNECTION = 'Server=(localdb)\MSSQLLocalDB;Integrated Security=True;Encrypt=False;'
 .\tests\bin\Release\DVLD.Tests.exe $PWD.Path
 ```
 
-Tests create a uniquely named `DVLD_Test_*` database, exercise the schema and workflows, and drop that database afterwards. They never use your normal `DVLD` database. The GitHub Actions workflow builds on Windows and runs these checks against a separate LocalDB instance.
+Tests create a uniquely named `DVLD_Test_*` database, exercise the schema and workflows, and drop that database afterwards. They never use your normal `DVLD` database. The GitHub Actions workflow builds on Windows and runs these checks against a separate LocalDB instance. LocalDB uses local IPC and does not support the TLS encryption setting used by a full SQL Server connection; use `Encrypt=False` for LocalDB only.
 
 See [the review](docs/REVIEW.md) for the changes and validation limits and [manual checks](docs/MANUAL_TESTS.md) for the Windows walkthrough.
 

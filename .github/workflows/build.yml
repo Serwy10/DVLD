@@ -18,7 +18,7 @@ jobs:
         run: |
           sqllocaldb create DVLDTests -s
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          $env:DVLD_TEST_SERVER_CONNECTION = 'Server=(localdb)\DVLDTests;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;'
+          $env:DVLD_TEST_SERVER_CONNECTION = 'Server=(localdb)\DVLDTests;Integrated Security=True;Encrypt=False;'
           & .\tests\bin\Release\DVLD.Tests.exe $PWD.Path
           $testExit = $LASTEXITCODE
           sqllocaldb stop DVLDTests -k

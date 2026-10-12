@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition="'$(Configuration)'==''">Debug</Configuration>
+    <Platform Condition="'$(Platform)'==''">AnyCPU</Platform>
+    <ProjectGuid>{B83A0A85-768C-4988-8CD3-A44E59EAA841}</ProjectGuid>
+    <OutputType>Exe</OutputType><RootNamespace>DVLD.Tests</RootNamespace><AssemblyName>DVLD.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion><OutputPath>bin\$(Configuration)\</OutputPath>
+    <LangVersion>7.3</LangVersion><WarningLevel>4</WarningLevel><Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <ItemGroup><Reference Include="System"/><Reference Include="System.Core"/><Reference Include="System.Data"/><Reference Include="System.Configuration"/></ItemGroup>
+  <ItemGroup><Compile Include="Program.cs"/><Compile Include="DatabaseTests.cs"/></ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DVLDDataAccess\DVLDDataAccess.csproj"><Project>{971E440F-AE5D-4F87-B4FD-A0F76B8BD486}</Project><Name>DVLDDataAccess</Name></ProjectReference>
+    <ProjectReference Include="..\DVLDBusinessLogic2\DVLDBusinessLogic2.csproj"><Project>{A24A61F3-BF72-4423-A8EE-E54D35875F22}</Project><Name>DVLDBusinessLogic2</Name></ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

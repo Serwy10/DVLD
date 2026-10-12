@@ -1,0 +1,28 @@
+# Visual Studio and build output
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.pdb
+*.cache
+TestResults/
+# Local credentials and personal data
+loginInfo.txt
+remembered-user.txt
+errors.log
+App.local.config
+.env
+.env.*
+!.env.example
+*.bak
+*.mdf
+*.ldf
+*.db
+*.zip
+# OS/editor state
+.DS_Store
+Thumbs.db
+.vscode/

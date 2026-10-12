@@ -1,0 +1,26 @@
+name: Build and regression tests
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: microsoft/setup-msbuild@v2
+      - name: Build solution
+        run: msbuild DVLD.sln /m /p:Configuration=Release /p:Platform="Any CPU" /verbosity:minimal
+      - name: Run regression and SQL integration tests
+        shell: powershell
+        run: |
+          sqllocaldb create DVLDTests -s
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $env:DVLD_TEST_SERVER_CONNECTION = 'Server=(localdb)\DVLDTests;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;'
+          & .\tests\bin\Release\DVLD.Tests.exe $PWD.Path
+          $testExit = $LASTEXITCODE
+          sqllocaldb stop DVLDTests -k
+          sqllocaldb delete DVLDTests
+          exit $testExit

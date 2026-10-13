@@ -151,7 +151,8 @@ namespace DVLD
 
             personID = (((CtrlShowDetailscs)showPerson)._personID);
 
-            return clsApplication.IsThisPersonHasApplicationFromThatCategory(personID,cbLicensesClasses.SelectedItem.ToString());
+            int excludedApplicationID = mode == _enMode.Update ? application._applicationID : -1;
+            return clsApplication.IsThisPersonHasApplicationFromThatCategory(personID,cbLicensesClasses.SelectedItem.ToString(),excludedApplicationID);
 
         }
 

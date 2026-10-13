@@ -79,6 +79,10 @@ VALUES(@national,N'Test',N'Synthetic',N'Person','19900101',0,N'Test address',N'0
                 var app=new clsApplication { _ApplicationPersonID=applicant,_ApplicationStartDate=DateTime.Now,_TypeID=1,
                     _ApplicationStatus="New",lastStatusDate=DateTime.Now,paidFees=15,createdByUserID=userID,_LicenseClassID=3 };
                 Program.Assert(app.Save(),"Local application and details must be created.");
+                string className=clsApplication.getClassName(3);
+                Program.Assert(clsApplication.IsThisPersonHasApplicationFromThatCategory(applicant,className),"A new application must detect an existing application in the same class.");
+                Program.Assert(!clsApplication.IsThisPersonHasApplicationFromThatCategory(applicant,className,app._applicationID),"Editing must exclude the current application from duplicate checks.");
+                Program.Assert(app.Save(),"An existing new application can be saved without changing its class.");
                 int localID=Convert.ToInt32(Sql(cs,"SELECT LocalDrivingLicenseApplicationID FROM LocalDrivingLicenseApplications WHERE ApplicationID=@id","@id",app._applicationID));
                 Program.Assert(LicenseWorkflowData.IssueFirst(applicant,app._applicationID,3,DateTime.Now,DateTime.Now.AddYears(10),"",20,userID)==null,"Issuance requires three different passed test types.");
                 int premature=-1;
@@ -87,6 +91,11 @@ VALUES(@national,N'Test',N'Synthetic',N'Person','19900101',0,N'Test address',N'0
                 {
                     int appointment=-1;
                     Program.Assert(ManageTestAppointmentsData.saveNewTestAppointment(ref appointment,localID,DateTime.Now,type,10,userID,false),"Appointment must follow the passed-test order.");
+                    if (type==1)
+                    {
+                        Program.Assert(app.Save(),"Same-class application edits remain valid after an appointment exists.");
+                        Program.Assert(!ManageApplications.UpdateApplicationInfo(app._applicationID,DateTime.Now,2),"Application class cannot change after an appointment exists.");
+                    }
                     int duplicate=-1;
                     Program.Assert(!ManageTestAppointmentsData.saveNewTestAppointment(ref duplicate,localID,DateTime.Now,type,10,userID,false),"Only one open appointment per test type.");
                     int testID=-1;
@@ -98,6 +107,8 @@ VALUES(@national,N'Test',N'Synthetic',N'Person','19900101',0,N'Test address',N'0
                         Program.Assert(!clsTestAppointment.checkIfAppointmentIsLocked(appointment),"Failed test insert must roll back the lock.");
                     }
                     Program.Assert(ManageTestsData.saveNewTest(ref testID,appointment,true,"",userID),"Test result and lock must save together.");
+                    var completedAppointment=clsTestAppointment.Find(appointment);
+                    Program.Assert(completedAppointment!=null && completedAppointment.isLocked && completedAppointment.localDrivingID==localID,"Completed appointments must remain readable for test history.");
                     Program.Assert(!ManageTestsData.saveNewTest(ref testID,appointment,false,"",userID),"A test result cannot be recorded twice.");
                 }
                 Sql(cs,"CREATE TRIGGER FailLicense ON Licenses AFTER INSERT AS THROW 51004,'Injected issuance failure',1;");

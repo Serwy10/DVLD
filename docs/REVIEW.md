@@ -21,6 +21,7 @@
 - Test recording and appointment locking commit together, and duplicate/future results are rejected. Failed result insertion leaves the appointment open.
 - New demo schema adds foreign keys, validation constraints, and unique indexes for active license classes, open test appointments, and current detentions. These schema constraints are not automatically installed into an existing database.
 - Save methods change from add to update only after successful insertion, preserving retry behavior.
+- Application-edit duplicate checks exclude the application being edited. Completed appointments remain readable for test history while their write operations stay locked.
 - Fixed old detention selection, empty list schemas, pass/fail display, disabled change-password navigation, nested sign-out windows, and empty-selection context menu failures.
 - Fixed searching by national number after an ID search and stale failed-license search state. First issuance now reads its own application ID instead of another open form's static DTO state.
 - Escaped apostrophes and wildcard characters in DataView searches and validated numeric/boolean filters.

@@ -222,7 +222,7 @@ SELECT SCOPE_IDENTITY();", connection, transaction))
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
 
-                string query = "Select * from testAppointments where testAppointmentID=@ID AND IsLocked=0";
+                string query = "Select * from testAppointments where testAppointmentID=@ID";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {

@@ -91,9 +91,9 @@ namespace DVLDBusinessLogic2
             return ManageApplications.LicensesClasses();
         }
 
-        public static bool IsThisPersonHasApplicationFromThatCategory(int personID,string className)
+        public static bool IsThisPersonHasApplicationFromThatCategory(int personID,string className, int excludedApplicationID = -1)
         {
-            return ManageApplications.PersonAlreadyHasApplicationOfThatClass(personID,className);
+            return ManageApplications.PersonAlreadyHasApplicationOfThatClass(personID,className,excludedApplicationID);
         }
 
         private bool AddNewApplication()

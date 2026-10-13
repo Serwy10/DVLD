@@ -77,7 +77,7 @@ namespace DVLDDataAccess
             }
             return -1;
         }
-        public static bool PersonAlreadyHasApplicationOfThatClass(int personID, string className)
+        public static bool PersonAlreadyHasApplicationOfThatClass(int personID, string className, int excludedApplicationID = -1)
         {
             bool Existed = false;
 
@@ -85,13 +85,14 @@ namespace DVLDDataAccess
             {
                 string Query = "select l.ApplicationID,l.LicenseClassID,a.ApplicantPersonID\r\n\r\n" +
                     "from LocalDrivingLicenseApplications as l inner join Applications as a\r\non l.ApplicationID=a.ApplicationID\r\n" +
-                    "where a.ApplicantPersonID=@PID and l.LicenseClassID=@LID and a.ApplicationStatus <> 2";
+                    "where a.ApplicantPersonID=@PID and l.LicenseClassID=@LID and a.ApplicationStatus <> 2 and a.ApplicationID<>@excluded";
 
 
                 using (SqlCommand cmd = new SqlCommand(Query, conn))
                 {
                     cmd.Parameters.AddWithValue("@PID", personID);
                     cmd.Parameters.AddWithValue("@LID", getLicenseClassID(className));
+                    cmd.Parameters.AddWithValue("@excluded", excludedApplicationID);
 
                     try
                     {
